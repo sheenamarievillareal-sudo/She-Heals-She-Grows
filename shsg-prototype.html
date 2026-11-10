@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>She Heals, She Grows</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com/3.4.17"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.24.7/babel.min.js"></script>
+<style>
+:root{--bg:#FAF5EA;--card:#FFFDF8;--ink:#2F3B2A;--mute:#667360;--lav:#D8EEBF;--lavd:#4F7F2E;--sage:#BCD09C;--saged:#5E7355;--gold:#C9A24B;--line:#E9E0CF;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1B2119;--card:#252D22;--ink:#EEF3E6;--mute:#A9B8A0;--lav:#3F5230;--lavd:#B5DB8A;--sage:#44503C;--saged:#C3D3B4;--gold:#E0BC66;--line:#36402F;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#1B2119;--card:#252D22;--ink:#EEF3E6;--mute:#A9B8A0;--lav:#3F5230;--lavd:#B5DB8A;--sage:#44503C;--saged:#C3D3B4;--gold:#E0BC66;--line:#36402F;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{background:var(--bg);color:var(--ink);font-family:Figtree,system-ui,sans-serif;margin:0}
+h1,h2,h3,.serif{font-family:Fraunces,Georgia,serif;font-weight:600}
+.card{background:var(--card);border:1px solid var(--line);border-radius:20px}
+.btn{background:var(--lavd);color:var(--bg);border-radius:999px;padding:.6rem 1.1rem;font-weight:600}
+.btn2{border:1px solid var(--line);border-radius:999px;padding:.45rem .9rem;color:var(--ink);background:var(--card)}
+.chip-on{background:var(--lav);border-color:var(--lavd)}
+.field{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:.7rem .9rem;color:var(--ink)}
+button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.orb{transition:transform 4s ease-in-out;width:150px;height:150px;border-radius:50%;background:radial-gradient(circle at 35% 30%,var(--lav),var(--sage))}
+@media (prefers-reduced-motion:reduce){.orb{transition:none}}
+.bar{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px);z-index:20}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const {useState,useEffect}=React;
+const PAGES=[["home","Home"],["devotional","Daily Devotional"],["journal","My Healing Journal"],["growth","My Growth Journey"],["toolbox","Wellness Toolbox"],["library","Resource Library"],["expert","Expert of the Month"],["community","Community"]];
+const BOTTOM=["home","devotional","journal","growth"];
+const LIB=[
+{id:1,t:"Releasing what you can’t carry",k:"Healing",d:"A gentle guide to setting down old hurts."},
+{id:2,t:"Psalm 34 reflection guide",k:"Faith",d:"Seven days of verses for a weary heart."},
+{id:3,t:"Naming your feelings",k:"Emotions",d:"A printable feelings wheel and how to use it."},
+{id:4,t:"Boundaries with grace",k:"Growth",d:"Say no kindly, and mean it."},
+{id:5,t:"Sunday reset checklist",k:"Growth",d:"Ten quiet minutes to prepare your week."},
+{id:6,t:"Prayers for anxious mornings",k:"Faith",d:"Short prayers to read before the day begins."}];
+const PROMPTS=["What am I carrying today that I could hand to God?","Where did I notice peace this week?","What is one kind thing I can say to myself right now?"];
+const GROW=[
+{n:"Spiritual roots",steps:["Pray for five minutes","Read one psalm","Write one gratitude"]},
+{n:"Emotional awareness",steps:["Name today’s feeling","Pause before reacting once","Share with a trusted friend"]},
+{n:"Daily practice",steps:["Drink water and stretch","Take a ten-minute walk","Go to bed by 10 pm"]}];
+const POSTS=[
+{w:"Renee",m:"Today I finally forgave my sister. It felt lighter than I expected.",l:12},
+{w:"Joy",m:"Prayers for my mom’s surgery tomorrow, please. Thank you, sisters.",l:27},
+{w:"Danielle",m:"Week three of morning journaling and I can feel the difference.",l:9}];
+const useLoc=()=>{const [p,setP]=useState((location.hash||"#home").slice(1));useEffect(()=>{const f=()=>setP((location.hash||"#home").slice(1));addEventListener("hashchange",f);return()=>removeEventListener("hashchange",f)},[]);return p};
+const go=p=>{location.hash=p;scrollTo(0,0)};
+
+function Head({t,s}){return <div className="mb-5"><h1 className="text-3xl leading-tight">{t}</h1>{s&&<p style={{color:"var(--mute)"}} className="mt-1 max-w-prose">{s}</p>}</div>}
+
+function Home({user}){return <div>
+<div className="card p-6 md:p-10 mb-6" style={{background:"linear-gradient(160deg,var(--lav),var(--card) 70%)"}}>
+<p style={{color:"var(--saged)"}} className="font-semibold mb-2">Welcome, friend</p>
+<h1 className="text-4xl md:text-5xl leading-tight max-w-xl">Pause. Breathe. You are allowed to heal at your own pace.</h1>
+<p className="mt-3 max-w-lg" style={{color:"var(--mute)"}}>She Heals, She Grows is a space for women to reflect, heal and grow through faith, emotional awareness and practical steps, led by Coach Tracy Bryant.</p>
+<div className="mt-5 flex flex-wrap gap-3"><button className="btn" onClick={()=>go("devotional")}>Read today’s devotional</button><button className="btn2" onClick={()=>go("toolbox")}>Try a breathing exercise</button></div></div>
+<div className="grid gap-4 md:grid-cols-3">
+{[["journal","My Healing Journal","A private place to write what’s on your heart."],["growth","My Growth Journey","Small daily steps across faith, feelings and habits."],["library","Resource Library","Free guides, prayers and printables. No sign-up needed."]].map(([p,t,d])=>
+<button key={p} onClick={()=>go(p)} className="card p-5 text-left"><h3 className="text-xl">{t}</h3><p className="mt-1" style={{color:"var(--mute)"}}>{d}</p></button>)}</div>
+{!user&&<p className="mt-6 text-sm" style={{color:"var(--mute)"}}>Everything public is free without an account. Sign in only if you want to save a private journal, bookmarks and progress.</p>}
+</div>}
+
+function Devotional({marks,toggleMark,done,setDone}){return <div>
+<Head t="Daily Devotional" s="Take five quiet minutes with today’s Scripture."/>
+<div className="card p-6 max-w-2xl">
+<p style={{color:"var(--gold)"}} className="font-semibold">Today’s verse</p>
+<p className="serif text-2xl mt-2 leading-snug">“Come to me, all you who are weary and burdened, and I will give you rest.”</p>
+<p className="mt-1" style={{color:"var(--mute)"}}>Matthew 11:28</p>
+<h3 className="text-xl mt-6">Reflection</h3>
+<p className="mt-2 leading-relaxed">Rest is not a reward for finishing everything. It is an invitation. Today, notice one thing you are gripping tightly and imagine opening your hand.</p>
+<h3 className="text-xl mt-5">Pray</h3>
+<p className="mt-2 leading-relaxed">Lord, I am tired. Meet me here. Show me what to release and what to keep. Amen.</p>
+<div className="mt-6 flex flex-wrap gap-3">
+<button className="btn" onClick={()=>setDone(!done)}>{done?"Completed today":"Mark as complete"}</button>
+<button className="btn2" onClick={()=>toggleMark("dev")}>{marks.dev?"Bookmarked":"Bookmark"}</button></div></div></div>}
+
+function Journal({user,openAuth}){
+const [mood,setMood]=useState("Hopeful");const [pi,setPi]=useState(0);const [txt,setTxt]=useState("");const [items,setItems]=useState([]);
+const save=()=>{if(!txt.trim())return;setItems([{id:Date.now(),mood,p:PROMPTS[pi],txt},...items]);setTxt("")};
+return <div><Head t="My Healing Journal" s="Write freely. In the finished app, entries will be visible only to you."/>
+<p className="card p-3 mb-4 text-sm max-w-2xl" style={{background:"var(--lav)"}}>Prototype note: entries stay on this screen only and disappear when you close the page. Saving to an account is not connected yet.</p>
+<div className="card p-5 max-w-2xl">
+<label className="font-semibold">How are you feeling?</label>
+<div className="flex flex-wrap gap-2 mt-2 mb-4">{["Hopeful","Tired","Anxious","Grateful","Hurting","Peaceful"].map(m=><button key={m} onClick={()=>setMood(m)} className={"btn2 "+(mood===m?"chip-on":"")}>{m}</button>)}</div>
+<label className="font-semibold" htmlFor="pr">Writing prompt</label>
+<select id="pr" className="field mt-2 mb-4" value={pi} onChange={e=>setPi(+e.target.value)}>{PROMPTS.map((p,i)=><option key={i} value={i}>{p}</option>)}</select>
+<textarea aria-label="Journal entry" className="field" rows="6" placeholder="Start writing here" value={txt} onChange={e=>setTxt(e.target.value)}/>
+<button className="btn mt-3" onClick={save}>Save entry</button></div>
+<div className="mt-6 max-w-2xl grid gap-3">
+{items.length===0&&<p style={{color:"var(--mute)"}}>No entries yet. Your first one can be a single sentence.</p>}
+{items.map(i=><div key={i.id} className="card p-4"><p className="text-sm" style={{color:"var(--mute)"}}>Feeling {i.mood.toLowerCase()}. {i.p}</p><p className="mt-2 whitespace-pre-wrap">{i.txt}</p><button className="text-sm mt-2 underline" style={{color:"var(--lavd)"}} onClick={()=>setItems(items.filter(x=>x.id!==i.id))}>Delete entry</button></div>)}</div></div>}
+
+function Growth({checks,setChecks}){
+const tot=GROW.reduce((a,g)=>a+g.steps.length,0);const n=Object.values(checks).filter(Boolean).length;
+return <div><Head t="My Growth Journey" s="Check off small steps. Progress here is kindness, not pressure."/>
+<div className="card p-5 mb-5 max-w-2xl"><p className="font-semibold">Today: {n} of {tot} steps</p>
+<div className="h-3 rounded-full mt-2" style={{background:"var(--line)"}}><div className="h-3 rounded-full" style={{width:(n/tot*100)+"%",background:"var(--gold)",transition:"width .4s"}}/></div></div>
+<div className="grid gap-4 md:grid-cols-3">{GROW.map(g=><div key={g.n} className="card p-5"><h3 className="text-xl mb-3">{g.n}</h3>
+{g.steps.map(s=><label key={s} className="flex gap-3 items-start py-1.5 cursor-pointer"><input type="checkbox" className="mt-1 w-5 h-5" style={{accentColor:"var(--saged)"}} checked={!!checks[s]} onChange={()=>setChecks({...checks,[s]:!checks[s]})}/><span>{s}</span></label>)}</div>)}</div></div>}
+
+function Toolbox(){
+const [run,setRun]=useState(false);const [ph,setPh]=useState(0);const [aff,setAff]=useState(0);const [g,setG]=useState(0);
+const PH=["Breathe in","Hold","Breathe out","Hold"];
+useEffect(()=>{if(!run)return;const t=setInterval(()=>setPh(p=>(p+1)%4),4000);return()=>clearInterval(t)},[run]);
+const AFF=["I am held, even when I feel undone.","Healing is not linear, and I am still growing.","I release what I cannot control.","I am worthy of rest."];
+const GR=["Name 5 things you can see","Name 4 things you can touch","Name 3 things you can hear","Name 2 things you can smell","Name 1 thing you can taste, then take a slow breath"];
+const big=run&&(ph===0||ph===1);
+return <div><Head t="Wellness Toolbox" s="Quick, calming practices for hard moments."/>
+<div className="grid gap-4 md:grid-cols-3">
+<div className="card p-5 text-center"><h3 className="text-xl mb-4">Box breathing</h3>
+<div className="flex justify-center my-4" style={{height:170,alignItems:"center"}}><div className="orb" style={{transform:big?"scale(1.15)":"scale(.75)"}}/></div>
+<p className="serif text-xl h-8" aria-live="polite">{run?PH[ph]:"Ready when you are"}</p>
+<button className="btn mt-3" onClick={()=>{setRun(!run);setPh(0)}}>{run?"Stop":"Begin"}</button></div>
+<div className="card p-5"><h3 className="text-xl mb-3">5-4-3-2-1 grounding</h3><p className="serif text-lg min-h-[4rem]">{GR[g]}</p>
+<div className="flex gap-2 mt-3"><button className="btn2" disabled={g===0} onClick={()=>setG(g-1)}>Back</button><button className="btn" onClick={()=>setG((g+1)%5)}>{g===4?"Start over":"Next"}</button></div></div>
+<div className="card p-5"><h3 className="text-xl mb-3">Affirmations</h3><p className="serif text-lg min-h-[4rem]">{AFF[aff]}</p>
+<button className="btn mt-3" onClick={()=>setAff((aff+1)%AFF.length)}>Show another</button></div></div></div>}
+
+function Library({marks,toggleMark}){
+const [f,setF]=useState("All");const ks=["All","Faith","Healing","Emotions","Growth"];
+return <div><Head t="Resource Library" s="All free. No account required."/>
+<div className="flex flex-wrap gap-2 mb-5">{ks.map(k=><button key={k} onClick={()=>setF(k)} className={"btn2 "+(f===k?"chip-on":"")}>{k}</button>)}</div>
+<div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">{LIB.filter(r=>f==="All"||r.k===f).map(r=><div key={r.id} className="card p-5 flex flex-col">
+<span className="text-sm font-semibold" style={{color:"var(--saged)"}}>{r.k}</span><h3 className="text-xl mt-1">{r.t}</h3><p className="mt-1 flex-1" style={{color:"var(--mute)"}}>{r.d}</p>
+<button className="btn2 mt-4 self-start" onClick={()=>toggleMark("lib"+r.id)}>{marks["lib"+r.id]?"Bookmarked":"Bookmark"}</button></div>)}</div></div>}
+
+function Expert(){return <div><Head t="Expert of the Month" s="A trusted voice, chosen by Coach Tracy."/>
+<div className="card p-6 max-w-2xl flex gap-5 flex-wrap md:flex-nowrap">
+<div className="shrink-0 rounded-full flex items-center justify-center serif text-3xl" style={{width:96,height:96,background:"var(--sage)",color:"var(--ink)"}}>DM</div>
+<div><h3 className="text-2xl">Dr. Maya Collins (sample)</h3><p style={{color:"var(--saged)"}} className="font-semibold">Licensed counselor, grief and trauma</p>
+<p className="mt-3 leading-relaxed">Sample bio: Dr. Collins helps women make room for grief without losing hope. This month she shares simple practices for gentle self-compassion.</p>
+<div className="flex flex-wrap gap-3 mt-4"><button className="btn">Read her featured guide</button><button className="btn2">Submit a question</button></div></div></div></div>}
+
+function Community({user,openAuth}){
+const [posts,setPosts]=useState(POSTS);const [t,setT]=useState("");const [likes,setLikes]=useState({});
+const post=()=>{if(!t.trim())return;setPosts([{w:user?user.split("@")[0]:"Guest",m:t,l:0},...posts]);setT("")};
+return <div><Head t="Community" s="Encourage one another. Share kindly and pray for each other."/>
+<div className="card p-5 max-w-2xl mb-5"><textarea aria-label="Share with the community" className="field" rows="3" placeholder="Share a word of encouragement or a prayer request" value={t} onChange={e=>setT(e.target.value)}/>
+<div className="flex items-center gap-3 mt-3"><button className="btn" onClick={post}>Share</button><span className="text-sm" style={{color:"var(--mute)"}}>Sample wall only; posts are not stored.</span></div></div>
+<div className="grid gap-3 max-w-2xl">{posts.map((p,i)=><div key={i} className="card p-4"><p className="font-semibold">{p.w}</p><p className="mt-1">{p.m}</p>
+<button className="btn2 mt-3 text-sm" onClick={()=>setLikes({...likes,[i]:!likes[i]})}>{likes[i]?"Praying with you":"I’m praying"} ({p.l+(likes[i]?1:0)})</button></div>)}</div></div>}
+
+function Auth({close,setUser}){
+const [e,setE]=useState("");const [msg,setMsg]=useState("");
+return <div className="fixed inset-0 z-50 flex items-end md:items-center justify-center p-4" style={{background:"rgba(40,30,55,.5)"}} role="dialog" aria-modal="true" aria-label="Sign in">
+<div className="card p-6 w-full max-w-sm"><h2 className="text-2xl">Sign in or join</h2>
+<p className="mt-1 text-sm" style={{color:"var(--mute)"}}>Optional. Members can save private journals, bookmarks and progress.</p>
+<p className="card p-2 mt-3 text-sm" style={{background:"var(--lav)"}}>Demo only: no real account is created yet. Real sign-in comes after Supabase is connected.</p>
+<label className="block mt-4 font-semibold" htmlFor="em">Email</label><input id="em" type="email" className="field mt-1" value={e} onChange={x=>setE(x.target.value)} placeholder="you@example.com"/>
+<label className="block mt-3 font-semibold" htmlFor="pw">Password</label><input id="pw" type="password" className="field mt-1" placeholder="At least 8 characters"/>
+{msg&&<p className="mt-3 text-sm">{msg}</p>}
+<div className="flex gap-3 mt-5"><button className="btn" onClick={()=>{if(!e.includes("@")){setMsg("Enter a valid email address.");return}setUser(e);close()}}>Continue (demo)</button><button className="btn2" onClick={close}>Cancel</button></div></div></div>}
+
+function App(){
+const page=useLoc();const [user,setUser]=useState(null);const [auth,setAuth]=useState(false);const [more,setMore]=useState(false);
+const [marks,setMarks]=useState({});const [done,setDone]=useState(false);const [checks,setChecks]=useState({});
+const toggleMark=k=>setMarks({...marks,[k]:!marks[k]});
+const cur=PAGES.find(p=>p[0]===page)?page:"home";
+const body={home:<Home user={user}/>,devotional:<Devotional marks={marks} toggleMark={toggleMark} done={done} setDone={setDone}/>,journal:<Journal/>,growth:<Growth checks={checks} setChecks={setChecks}/>,toolbox:<Toolbox/>,library:<Library marks={marks} toggleMark={toggleMark}/>,expert:<Expert/>,community:<Community user={user}/>}[cur];
+return <div>
+<header className="sticky top-0 z-30" style={{background:"var(--bg)",borderBottom:"1px solid var(--line)",paddingTop:"env(safe-area-inset-top,0px)"}}>
+<div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
+<button onClick={()=>go("home")} className="serif text-xl text-left leading-tight">She Heals, She Grows</button>
+<nav className="hidden lg:flex gap-1" aria-label="Main">{PAGES.map(([k,l])=><button key={k} onClick={()=>go(k)} className="px-3 py-1.5 rounded-full text-sm" style={cur===k?{background:"var(--lav)",fontWeight:600}:{}}>{l}</button>)}</nav>
+{user?<button className="btn2 text-sm" onClick={()=>setUser(null)}>Sign out</button>:<button className="btn2 text-sm" onClick={()=>setAuth(true)}>Sign in</button>}
+</div></header>
+<main className="max-w-6xl mx-auto px-4 pt-6 pb-32 lg:pb-12">{user&&<p className="mb-4 text-sm" style={{color:"var(--saged)"}}>Signed in as {user} (demo)</p>}{body}</main>
+<nav className="bar lg:hidden" aria-label="Main">
+<div className="grid grid-cols-5">{BOTTOM.map(k=><button key={k} onClick={()=>{setMore(false);go(k)}} className="py-3 text-xs" style={cur===k?{color:"var(--lavd)",fontWeight:700}:{color:"var(--mute)"}}>{PAGES.find(p=>p[0]===k)[1].replace("My ","").replace("Daily ","")}</button>)}
+<button onClick={()=>setMore(!more)} className="py-3 text-xs" style={{color:"var(--mute)"}}>More</button></div>
+{more&&<div className="grid grid-cols-2 gap-2 p-3" style={{borderTop:"1px solid var(--line)"}}>{["toolbox","library","expert","community"].map(k=><button key={k} className="btn2" onClick={()=>{setMore(false);go(k)}}>{PAGES.find(p=>p[0]===k)[1]}</button>)}</div>}
+</nav>
+{auth&&<Auth close={()=>setAuth(false)} setUser={setUser}/>}
+</div>}
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script>
+</body>
+</html>
